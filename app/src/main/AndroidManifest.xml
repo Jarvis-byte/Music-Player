@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/media_player_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer">
-        <activity android:name=".PlayerActivity"></activity>
+        <activity android:name=".AlbumDetails"></activity>
+        <activity android:name=".PlayerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -28,9 +28,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.musicplayer.AlbumDetailsAdapter.albumFiles;
 import static com.example.musicplayer.MainActivity.musicFiles;
 import static com.example.musicplayer.MainActivity.repeatBoolean;
 import static com.example.musicplayer.MainActivity.shuffleBoolean;
+import static com.example.musicplayer.MusicAdapter.mFiles;
 
 public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
     static ArrayList<MusicFiles> listSongs = new ArrayList<>();
@@ -132,7 +134,15 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     private void getIntentMethod() {
         position = getIntent().getIntExtra("position", -1);
-        listSongs = musicFiles;
+        String sender =getIntent().getStringExtra("sender");
+        if (sender!=null && sender.equals("albumDetails"))
+        {
+            listSongs = albumFiles;
+        }
+        else {
+            listSongs = mFiles;
+        }
+
         if (listSongs != null) {
             playPauseBtn.setImageResource(R.drawable.ic_baseline_pause_24);
             uri = Uri.parse(listSongs.get(position).getPath());
