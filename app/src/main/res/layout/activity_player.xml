@@ -47,7 +47,7 @@
 
     <RelativeLayout
         android:id="@+id/card"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_below="@+id/layout_top_btn">
 
@@ -55,7 +55,8 @@
             android:id="@+id/cover_art"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:src="@drawable/headphone" />
 
         <ImageView
@@ -63,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/gradient_ng" />
+           />
     </RelativeLayout>
 
     <TextView
