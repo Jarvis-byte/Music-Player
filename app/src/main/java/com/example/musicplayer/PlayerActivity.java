@@ -1,8 +1,5 @@
 package com.example.musicplayer;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +25,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
@@ -39,10 +34,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static com.example.musicplayer.AlbumDetailsAdapter.albumFiles;
-import static com.example.musicplayer.ApplicationClass.ACTION_NEXT;
-import static com.example.musicplayer.ApplicationClass.ACTION_PLAY;
-import static com.example.musicplayer.ApplicationClass.ACTION_PREVIOUS;
-import static com.example.musicplayer.ApplicationClass.CHANNEL_ID_2;
 import static com.example.musicplayer.MainActivity.repeatBoolean;
 import static com.example.musicplayer.MainActivity.shuffleBoolean;
 import static com.example.musicplayer.MusicAdapter.mFiles;
@@ -50,9 +41,9 @@ import static com.example.musicplayer.MusicAdapter.mFiles;
 public class PlayerActivity extends AppCompatActivity implements ActionPlaying, ServiceConnection {
     static ArrayList<MusicFiles> listSongs = new ArrayList<>();
     static Uri uri;
-    //static MediaPlayer mediaPlayer;
+
     TextView song_name, artist_name, duration_played, duration_total;
-    ImageView cover_art, nextBtn, prevBtn, backBtn, shuffleBtn, repeatBtn;
+    ImageView cover_art, nextBtn, prevBtn, back_btn, shuffleBtn, repeatBtn;
     FloatingActionButton playPauseBtn;
     SeekBar seekBar;
     int position = -1;
@@ -82,7 +73,6 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -127,7 +117,14 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             }
         });
-
+        back_btn = findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayerActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -535,8 +532,6 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
     public void onServiceDisconnected(ComponentName name) {
         musicService = null;
     }
-
-
 
 
 }

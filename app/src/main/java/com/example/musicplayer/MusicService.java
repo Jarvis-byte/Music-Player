@@ -1,10 +1,10 @@
 package com.example.musicplayer;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -28,6 +28,10 @@ import static com.example.musicplayer.PlayerActivity.listSongs;
 
 
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener {
+    public static final String MUSIC_LAST_PLAYED = "LAST_PLAYED";
+    public static final String MUSIC_FILE = "STORED_MUSIC";
+    public static final String ARTIST_NAME = "ARTIST NAME";
+    public static final String SONG_NAME = "SONG NAME";
     IBinder mBinder = new MyBinder();
     MediaPlayer mediaPlayer;
     ArrayList<MusicFiles> musicFiles = new ArrayList<>();
@@ -35,6 +39,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     int position = -1;
     ActionPlaying actionPlaying;
     MediaSessionCompat mediaSessionCompat;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -127,6 +132,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     void createMediaPlayer(int positionInner) {
         position = positionInner;
         uri = Uri.parse(musicFiles.get(position).getPath());
+        SharedPreferences.Editor editor = getSharedPreferences(MUSIC_LAST_PLAYED, MODE_PRIVATE)
+                .edit();
+        editor.putString(ARTIST_NAME,musicFiles.get(position).getArtist());
+        editor.putString(SONG_NAME,musicFiles.get(position).getTitle());
+        editor.putString(MUSIC_FILE, uri.toString());
+        editor.apply();
         mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
     }
 
@@ -157,12 +168,6 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
 
     void setCallBack(ActionPlaying actionPlaying) {
         this.actionPlaying = actionPlaying;
-    }
-
-    public class MyBinder extends Binder {
-        MusicService getService() {
-            return MusicService.this;
-        }
     }
 
     void showNotification(int playPauseBtn) {
@@ -202,14 +207,21 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                 .setOnlyAlertOnce(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .build();
-        startForeground(2,notification);
+        startForeground(2, notification);
 
     }
+
     private byte[] getAlbumArt(String uri) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(uri);
         byte[] art = retriever.getEmbeddedPicture();
         retriever.release();
         return art;
+    }
+
+    public class MyBinder extends Binder {
+        MusicService getService() {
+            return MusicService.this;
+        }
     }
 }

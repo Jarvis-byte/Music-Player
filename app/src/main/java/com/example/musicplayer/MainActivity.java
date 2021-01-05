@@ -29,6 +29,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static final int REQUEST_CODE = 1;
+    public static final String MUSIC_LAST_PLAYED = "LAST_PLAYED";
+    public static final String MUSIC_FILE = "STORED_MUSIC";
+    public static final String ARTIST_NAME = "ARTIST NAME";
+    public static final String SONG_NAME = "SONG NAME";
+    public static boolean SHOW_MINI_PLAYER = false;
+    public static String PATH_TO_FLAG = null;
+    public static String ARTIST_TO_FLAG = null;
+    public static String SONG_TO_FLAG = null;
     static ArrayList<MusicFiles> musicFiles;
     static boolean shuffleBoolean = false, repeatBoolean = false;
     static ArrayList<MusicFiles> albums = new ArrayList<>();
@@ -187,6 +195,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(MUSIC_LAST_PLAYED, MODE_PRIVATE);
+        String path = preferences.getString(MUSIC_FILE, null);
+        String artist = preferences.getString(ARTIST_NAME, null);
+        String song_name = preferences.getString(SONG_NAME, null);
+
+        if (path != null) {
+            SHOW_MINI_PLAYER = true;
+            PATH_TO_FLAG = path;
+            ARTIST_TO_FLAG = artist;
+            SONG_TO_FLAG = song_name;
+        } else {
+            SHOW_MINI_PLAYER = false;
+            PATH_TO_FLAG = null;
+            ARTIST_TO_FLAG = null;
+            SONG_TO_FLAG = null;
+        }
     }
 
     public static class ViewPagerAdapter extends FragmentPagerAdapter {
